@@ -1,0 +1,28 @@
+\documentclass[a5paper,12pt,french]{scrartcl}
+
+\usepackage{fontspec}
+
+% https://texnique.fr/osqa/questions/8423/lualatex-et-ligatures
+\setmainfont{EBGaramond}
+[
+  Extension      = .otf ,
+  UprightFont    = *-Regular,
+  ItalicFont     = *-Italic,
+  BoldFont       = *-Bold,
+  BoldItalicFont = *-BoldItalic,
+  Numbers        = Lowercase,
+  Ligatures      = Discretionary,
+  Style          = Swash
+]
+
+\usepackage{babel}
+
+\usepackage{booktabs}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+\input{body}
+
+\end{document}

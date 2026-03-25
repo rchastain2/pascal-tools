@@ -1,0 +1,6 @@
+backup/
+lib/
+easter
+*.aux
+*.log
+*.lps

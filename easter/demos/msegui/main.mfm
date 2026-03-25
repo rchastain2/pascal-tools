@@ -1,0 +1,94 @@
+object mainfo: tmainfo
+  bounds_x = 291
+  bounds_y = 247
+  bounds_cx = 403
+  bounds_cy = 280
+  container.frame.localprops = []
+  container.frame.localprops1 = []
+  container.bounds = (
+    0
+    0
+    403
+    280
+  )
+  windowopacity = -Inf
+  oncreate = formcreate
+  moduleclassname = 'tmainform'
+  object edYear: tintegeredit
+    frame.caption = 'Ann'#233'e'
+    frame.localprops = []
+    frame.localprops1 = []
+    frame.outerframe = (
+      0
+      18
+      0
+      0
+    )
+    bounds_x = 8
+    bounds_y = 8
+    bounds_cx = 64
+    bounds_cy = 40
+    reffontheight = 15
+  end
+  object dsEasterNum: tintegerdisp
+    frame.caption = 'Nombre d''Oudin'
+    frame.localprops = []
+    frame.localprops1 = []
+    frame.outerframe = (
+      0
+      18
+      38
+      0
+    )
+    taborder = 1
+    bounds_x = 8
+    bounds_y = 56
+    bounds_cx = 101
+    bounds_cy = 40
+    reffontheight = 15
+  end
+  object btCompute: tbutton
+    taborder = 2
+    bounds_x = 320
+    bounds_y = 232
+    bounds_cx = 64
+    bounds_cy = 24
+    state = [as_localcaption, as_localonexecute]
+    caption = 'Calculer'
+    onexecute = buttonclick
+  end
+  object dsEasterDate: tstringdisp
+    frame.caption = 'Date du dimanche de P'#226'ques'
+    frame.localprops = []
+    frame.localprops1 = []
+    frame.outerframe = (
+      0
+      18
+      52
+      0
+    )
+    taborder = 3
+    bounds_x = 8
+    bounds_y = 104
+    bounds_cx = 180
+    bounds_cy = 40
+    reffontheight = 15
+  end
+  object dsAshDate: tstringdisp
+    frame.caption = 'Date du mercredi des Cendres'
+    frame.localprops = []
+    frame.localprops1 = []
+    frame.outerframe = (
+      0
+      18
+      58
+      0
+    )
+    taborder = 4
+    bounds_x = 8
+    bounds_y = 152
+    bounds_cx = 186
+    bounds_cy = 40
+    reffontheight = 15
+  end
+end

@@ -7,7 +7,7 @@ uses
 var
   LConfigFilePath: string;
   LHost, LUserName, LPassword, LLocalDir: string;
-  LFileListPath, LLocalFile{, LRemoteDir}, LRemoteFile: string;
+  LFileListPath, LLocalFile, LRemoteFile: string;
   LFileList: TStringList;
   LFileIndex: integer;
   LFTPSend: TFTPSend;
@@ -75,36 +75,23 @@ begin
         
         WriteLn('[DEBUG] LLocalFile "', LLocalFile, '"');
         
-        //LRemoteDir := ExtractFileDir(LLocalFile);
-        //Delete(LRemoteDir, 1, Length(LLocalDir));
-        //
-        //WriteLn('[DEBUG] LRemoteDir ', LRemoteDir);
-        
         LRemoteFile := Copy(LLocalFile, Succ(Length(LLocalDir)), Length(LLocalFile));
         
         WriteLn('[DEBUG] LRemoteFile "', LRemoteFile, '"');
         
-        //if LFTPSend.ChangeWorkingDir(LRemoteDir) then
-        //begin
-        //  WriteLn('[DEBUG] Current directory ', LFTPSend.GetCurrentDir);
-          
-          LFTPSend.DirectFile := TRUE;
-          LFTPSend.DirectFileName := LLocalFile;
-          
-          if not LFTPSend.StoreFile({ExtractFileName(LLocalFile)}LRemoteFile, FALSE) then
-          begin
-            WriteLn('[ERROR] Cannot upload file "', LLocalFile, '"');
-            WriteLn('[ERROR] ResultCode ', LFTPSend.ResultCode);
-            WriteLn('[ERROR] ResultString "', LFTPSend.ResultString, '"');
-            LFileIndex := LFileList.Count;
-          end;
-        //end else
-        //begin
-        //  WriteLn('[ERROR] Cannot change directory to "', LRemoteDir, '"');
-        //  WriteLn('[ERROR] ResultCode ', LFTPSend.ResultCode);
-        //  WriteLn('[ERROR] ResultString "', LFTPSend.ResultString, '"');
-        //  LFileIndex := LFileList.Count;
-        //end;
+        LFTPSend.DirectFile := TRUE;
+        LFTPSend.DirectFileName := LLocalFile;
+        
+        if LFTPSend.StoreFile(LRemoteFile, FALSE) then
+        begin
+          Sleep(1000);
+        end else
+        begin
+          WriteLn('[ERROR] Cannot upload file "', LLocalFile, '"');
+          WriteLn('[ERROR] ResultCode ', LFTPSend.ResultCode);
+          WriteLn('[ERROR] ResultString "', LFTPSend.ResultString, '"');
+          LFileIndex := LFileList.Count;
+        end;
       end;
       
       WriteLn('[DEBUG] Logout ', LFTPSend.Logout);

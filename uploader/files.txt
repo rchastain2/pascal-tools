@@ -1,3 +1,3 @@
-/home/roland/Documents/site/www/roland/temp/file1.txt
-/home/roland/Documents/site/www/roland/temp/file2.txt
+/home/roland/Documents/site/public_html/roland/temp/file1.txt
+/home/roland/Documents/site/public_html/roland/temp/file2.txt
 /home/roland/Documents/file3.txt

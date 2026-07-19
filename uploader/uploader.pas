@@ -7,7 +7,7 @@ uses
 var
   LConfigFilePath: string;
   LHost, LUserName, LPassword, LLocalDir: string;
-  LFileListPath, LLocalFile, LRemoteDir: string;
+  LFileListPath, LLocalFile{, LRemoteDir}, LRemoteFile: string;
   LFileList: TStringList;
   LFileIndex: integer;
   LFTPSend: TFTPSend;
@@ -23,7 +23,7 @@ begin
   end else
   begin
     WriteLn('[WARNING] Cannot find configuration file');
-    SaveConfiguration(LConfigFilePath, 'msegui.net', 'pmwevymq', 'xxxx', '/home/roland/Documents/site/www');
+    SaveConfiguration(LConfigFilePath, 'msegui.net', 'pmwevymq', 'xxxx', '/home/roland/Documents/site');
     WriteLn('[INFO] Created configuration file ', LConfigFilePath);
     WriteLn('[INFO] Please edit file and restart program');
     Exit;
@@ -69,38 +69,42 @@ begin
         
         if Pos(LLocalDir, LLocalFile) = 0 then
         begin
-          WriteLn('[WARNING] Cannot upload file "', LLocalFile, '" (doesn''t belong to the mirror directory)');
+          WriteLn('[WARNING] Cannot upload file "', LLocalFile, '" (must be located in the mirror folder)');
           Continue;
         end;
         
-        WriteLn('[DEBUG] Upload file "', LLocalFile, '"');
+        WriteLn('[DEBUG] LLocalFile "', LLocalFile, '"');
         
-        LRemoteDir := ExtractFileDir(LLocalFile);
-        Delete(LRemoteDir, 1, Length(LLocalDir));
+        //LRemoteDir := ExtractFileDir(LLocalFile);
+        //Delete(LRemoteDir, 1, Length(LLocalDir));
+        //
+        //WriteLn('[DEBUG] LRemoteDir ', LRemoteDir);
         
-        WriteLn('[DEBUG] LRemoteDir ', LRemoteDir);
+        LRemoteFile := Copy(LLocalFile, Succ(Length(LLocalDir)), Length(LLocalFile));
         
-        if LFTPSend.ChangeWorkingDir(LRemoteDir) then
-        begin
-          WriteLn('[DEBUG] Current directory ', LFTPSend.GetCurrentDir);
+        WriteLn('[DEBUG] LRemoteFile "', LRemoteFile, '"');
+        
+        //if LFTPSend.ChangeWorkingDir(LRemoteDir) then
+        //begin
+        //  WriteLn('[DEBUG] Current directory ', LFTPSend.GetCurrentDir);
           
           LFTPSend.DirectFile := TRUE;
           LFTPSend.DirectFileName := LLocalFile;
           
-          if not LFTPSend.StoreFile(ExtractFileName(LLocalFile), FALSE) then
+          if not LFTPSend.StoreFile({ExtractFileName(LLocalFile)}LRemoteFile, FALSE) then
           begin
             WriteLn('[ERROR] Cannot upload file "', LLocalFile, '"');
             WriteLn('[ERROR] ResultCode ', LFTPSend.ResultCode);
             WriteLn('[ERROR] ResultString "', LFTPSend.ResultString, '"');
             LFileIndex := LFileList.Count;
           end;
-        end else
-        begin
-          WriteLn('[ERROR] Cannot change directory to "', LRemoteDir, '"');
-          WriteLn('[ERROR] ResultCode ', LFTPSend.ResultCode);
-          WriteLn('[ERROR] ResultString "', LFTPSend.ResultString, '"');
-          LFileIndex := LFileList.Count;
-        end;
+        //end else
+        //begin
+        //  WriteLn('[ERROR] Cannot change directory to "', LRemoteDir, '"');
+        //  WriteLn('[ERROR] ResultCode ', LFTPSend.ResultCode);
+        //  WriteLn('[ERROR] ResultString "', LFTPSend.ResultString, '"');
+        //  LFileIndex := LFileList.Count;
+        //end;
       end;
       
       WriteLn('[DEBUG] Logout ', LFTPSend.Logout);

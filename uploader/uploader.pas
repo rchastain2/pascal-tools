@@ -4,6 +4,9 @@ program Uploader;
 uses
   SysUtils, Classes, ftpsend, ssl_openssl3, Configuration;
 
+const
+  CDelay = 500;
+
 var
   LConfigFilePath: string;
   LHost, LUserName, LPassword, LLocalDir: string;
@@ -84,7 +87,7 @@ begin
         
         if LFTPSend.StoreFile(LRemoteFile, FALSE) then
         begin
-          Sleep(1000);
+          Sleep(CDelay);
         end else
         begin
           WriteLn('[ERROR] Cannot upload file "', LLocalFile, '"');

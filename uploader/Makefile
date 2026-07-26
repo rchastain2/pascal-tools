@@ -1,5 +1,5 @@
 
-SYNAPSE := $(HOME)/Documents/pascal/sources/synapse
+SYNAPSE := $(HOME)/Documents/sources/synapse
 
 PC := fpc
 PFLAGS := -Mobjfpc -Sh

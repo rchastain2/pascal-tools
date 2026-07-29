@@ -1,0 +1,36 @@
+
+https://forum.lazarus.freepascal.org/index.php?topic=66528.msg510192#msg510192
+
+The fonction you propose does the cropping indeed.
+
+Note that in the modified image, if pixels had an alpha value lower than 162, they become fully transparent. So it is not just cropping, it also removes semi-transparent pixels.
+
+To keep the semi-transparent pixels, you can adjust the code like this:
+
+
+    procedure CropBGRA(var LBitmap : TBgraBitmap);
+    const
+         CThreshold = 162;
+    var
+         LMask: TGrayscaleMask;
+         LData: PByte;
+         LRect: TRect;
+         LIndex: integer;
+    begin
+         // make a copy of the alpha channel
+         LMask := TGrayscaleMask.Create(LBitmap, cAlpha);
+         LData := LMask.Data;
+         for LIndex := LMask.NbPixels - 1 downto 0 do
+         begin
+           if LData^ < CThreshold then
+             LData^ := 0;
+           Inc(LData);
+         end;
+         // get bounds of the modified mask
+         LRect := LMask.GetImageBounds;
+         LMask.Free;
+         BGRAReplace(LBitmap, LBitmap.GetPart(LRect));
+    end;
+
+
+Also you may want to adjust this value for example to 32 to keep most pixels, including shadows.

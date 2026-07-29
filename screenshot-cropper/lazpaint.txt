@@ -1,0 +1,8 @@
+
+About your question Roland, I guess the pixels around are half-transparent and make the shadow.
+
+You can remove them using Filter > Apply function. In the alpha expression put something like:
+
+    (alpha-0.5)*2
+
+Then you will be able to crop it more tightly.

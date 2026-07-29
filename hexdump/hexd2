@@ -1,0 +1,5 @@
+#!/bin/bash
+
+EXE=~/Documents/pascal/outils/hexdump/hexdump
+
+$EXE < $1

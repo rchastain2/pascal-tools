@@ -1,0 +1,42 @@
+object Form1: TForm1
+  Left = 292
+  Height = 503
+  Top = 153
+  Width = 420
+  Caption = 'Screenshot Cropper'
+  ClientHeight = 503
+  ClientWidth = 420
+  Color = clGray
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnPaint = FormPaint
+  LCLVersion = '1.8.4.0'
+  object EraseShadowButton: TButton
+    Left = 116
+    Height = 25
+    Top = 473
+    Width = 150
+    Caption = 'Erase Shadow'
+    OnClick = EraseShadowButtonClick
+    TabOrder = 0
+  end
+  object AlphaValueEdit: TSpinEdit
+    Left = 2
+    Height = 28
+    Top = 473
+    Width = 50
+    Enabled = False
+    MaxValue = 255
+    TabOrder = 1
+    Value = 162
+  end
+  object CropPictureButton: TButton
+    Left = 268
+    Height = 25
+    Top = 473
+    Width = 150
+    Caption = 'Crop Picture'
+    OnClick = CropPictureButtonClick
+    TabOrder = 2
+  end
+end

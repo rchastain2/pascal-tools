@@ -1,3 +1,6 @@
 *.o
 *.ppu
+
 uploader
+
+simplelog/

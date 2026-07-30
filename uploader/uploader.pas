@@ -2,7 +2,7 @@
 program Uploader;
 
 uses
-  SysUtils, Classes, ftpsend, ssl_openssl3, Configuration;
+  SysUtils, Classes, ftpsend, ssl_openssl3, Configuration, SimpleLog;
 
 const
   CDelay = 500;
@@ -14,34 +14,37 @@ var
   LFileList: TStringList;
   LFileIndex: integer;
   LFTPSend: TFTPSend;
+  LLog: TSimpleLog;
 
 begin
+  LLog := TSimpleLog.Console;
+  
   LConfigFilePath := GetUserDir + ChangeFileExt({$I %FILE%}, '.cfg');
   
-  WriteLn('[DEBUG] LConfigFilePath ', LConfigFilePath);
+  LLog.Debug('LConfigFilePath %s', [LConfigFilePath]);
   
   if FileExists(LConfigFilePath) then
   begin
     LoadConfiguration(LConfigFilePath, LHost, LUserName, LPassword, LLocalDir);
   end else
   begin
-    WriteLn('[WARNING] Cannot find configuration file');
+    LLog.Warning('Cannot find configuration file');
     SaveConfiguration(LConfigFilePath, 'msegui.net', 'pmwevymq', 'xxxx', '/home/roland/Documents/site');
-    WriteLn('[INFO] Created configuration file ', LConfigFilePath);
-    WriteLn('[INFO] Please edit file and restart program');
+    LLog.Info('Created configuration file %s', [LConfigFilePath]);
+    LLog.Info('Please edit file and restart program');
     Exit;
   end;
   
-  WriteLn('[DEBUG] LHost ', LHost);
-  WriteLn('[DEBUG] LUserName ', LUserName);
-  WriteLn('[DEBUG] LPassword ', StringOfChar('*', Length(LPassword)));
-  WriteLn('[DEBUG] LLocalDir ', LLocalDir);
+  LLog.Debug('LHost %s', [LHost]);
+  LLog.Debug('LUserName %s', [LUserName]);
+  LLog.Debug('LPassword %s', [StringOfChar('*', Length(LPassword))]);
+  LLog.Debug('LLocalDir %s', [LLocalDir]);
   
   LFileListPath := ParamStr(1);
   
   if not FileExists(LFileListPath) then
   begin
-    WriteLn('[ERROR] Cannot find file "', LFileListPath, '"');
+    LLog.Error('Cannot find file "%s"', [LFileListPath]);
     Exit;
   end;
   
@@ -66,21 +69,21 @@ begin
         
         if not FileExists(LLocalFile) then
         begin
-          WriteLn('[WARNING] Cannot find file "', LLocalFile, '"');
+          LLog.Warning('Cannot find file "%s"', [LLocalFile]);
           Continue;
         end;
         
         if Pos(LLocalDir, LLocalFile) = 0 then
         begin
-          WriteLn('[WARNING] Cannot upload file "', LLocalFile, '" (must be located in the mirror folder)');
+          LLog.Warning('Cannot upload file "%s" (must be located in the mirror folder)', [LLocalFile]);
           Continue;
         end;
         
-        WriteLn('[DEBUG] LLocalFile "', LLocalFile, '"');
+        LLog.Debug('LLocalFile "%s"', [LLocalFile]);
         
         LRemoteFile := Copy(LLocalFile, Succ(Length(LLocalDir)), Length(LLocalFile));
         
-        WriteLn('[DEBUG] LRemoteFile "', LRemoteFile, '"');
+        LLog.Debug('LRemoteFile "%s"', [LRemoteFile]);
         
         LFTPSend.DirectFile := TRUE;
         LFTPSend.DirectFileName := LLocalFile;
@@ -90,19 +93,19 @@ begin
           Sleep(CDelay);
         end else
         begin
-          WriteLn('[ERROR] Cannot upload file "', LLocalFile, '"');
-          WriteLn('[ERROR] ResultCode ', LFTPSend.ResultCode);
-          WriteLn('[ERROR] ResultString "', LFTPSend.ResultString, '"');
+          LLog.Error('Cannot upload file "%s"', [LLocalFile]);
+          LLog.Error('ResultCode %d', [LFTPSend.ResultCode]);
+          LLog.Error('ResultString "%s"', [LFTPSend.ResultString]);
           LFileIndex := LFileList.Count;
         end;
       end;
       
-      WriteLn('[DEBUG] Logout ', LFTPSend.Logout);
+      LLog.Debug('Logout %d', [Ord(LFTPSend.Logout)]);
     end else
     begin
-      WriteLn('[ERROR] Cannot log in');
-      WriteLn('[ERROR] ResultCode ', LFTPSend.ResultCode);
-      WriteLn('[ERROR] ResultString "', LFTPSend.ResultString, '"');
+      LLog.Error('Cannot log in');
+      LLog.Error('ResultCode %d', [LFTPSend.ResultCode]);
+      LLog.Error('ResultString "%s"', [LFTPSend.ResultString]);
     end;
   finally
     LFTPSend.Free;

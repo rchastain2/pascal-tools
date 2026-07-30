@@ -1,18 +1,20 @@
 
 SYNAPSE := $(HOME)/Documents/sources/synapse
+SIMPLELOG := simplelog
 
 PC := fpc
 PFLAGS := -Mobjfpc -Sh
 PFLAGS += -Fu$(SYNAPSE)
+PFLAGS += -Fu$(SIMPLELOG)/src
 PFLAGS += -CX -Xs -XX
 
 PROGRAM := uploader
 
-$(PROGRAM): $(PROGRAM).pas configuration.pas
+$(PROGRAM): $(PROGRAM).pas configuration.pas $(SIMPLELOG)
 	$(PC) $(PFLAGS) $<
 
-test: $(PROGRAM)
-	./$(PROGRAM) files.txt
+$(SIMPLELOG):
+	git clone https://github.com/ikelaiah/simplelog-fp.git $@
 
 clean:
 	@rm -fv *.o *.ppu $(PROGRAM)

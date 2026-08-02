@@ -1,90 +1,92 @@
 object Form1: TForm1
-  Left = 440
-  Height = 300
-  Top = 168
-  Width = 196
+  Left = 585
+  Height = 326
+  Top = 200
+  Width = 240
   Caption = 'Easy Colors'
-  ClientHeight = 300
-  ClientWidth = 196
-  Constraints.MaxWidth = 196
+  ClientHeight = 326
+  ClientWidth = 240
   LCLVersion = '4.6.0.0'
+  OnActivate = FormActivate
   OnCreate = FormCreate
   object lbColors: TListBox
     Left = 8
     Height = 91
     Top = 33
-    Width = 180
-    Anchors = [akTop, akLeft, akBottom]
+    Width = 224
     ItemHeight = 0
     ScrollWidth = 178
     TabOrder = 0
     TopIndex = -1
     OnClick = lbColorsClick
   end
-  object edColor: TLabeledEdit
+  object edColorHexa: TLabeledEdit
     Left = 8
     Height = 31
+    Hint = 'Hexadecimal value'
     Top = 148
-    Width = 180
-    Anchors = [akLeft, akBottom]
+    Width = 224
     EditLabel.Height = 19
-    EditLabel.Width = 180
-    EditLabel.Caption = 'Color'
+    EditLabel.Width = 224
+    EditLabel.Caption = 'Pascal'
     EditLabel.ParentColor = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
-    OnKeyPress = edColorKeyPress
+    OnKeyPress = edColorHexaKeyPress
   end
-  object edCairoColor: TLabeledEdit
+  object edColorCairo: TLabeledEdit
     Left = 8
     Height = 31
+    Hint = 'Color in Cairo format'
     Top = 202
-    Width = 180
-    Anchors = [akLeft, akBottom]
+    Width = 224
     EditLabel.Height = 19
-    EditLabel.Width = 180
-    EditLabel.Caption = 'Result'
+    EditLabel.Width = 224
+    EditLabel.Caption = 'Cairo'
     EditLabel.ParentColor = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 2
   end
-  object btCopy: TButton
+  object btCopyColorCairo: TButton
     Left = 8
     Height = 28
     Hint = 'Copy Cairo color to clipboard'
-    Top = 236
-    Width = 180
-    Anchors = [akLeft, akBottom]
-    Caption = 'Copy'
-    Enabled = False
+    Top = 290
+    Width = 108
+    Caption = 'Copy Cairo'
     TabOrder = 3
-    OnClick = btCopyClick
-  end
-  object cbAuto: TCheckBox
-    Left = 8
-    Height = 20
-    Hint = 'Copy automatically result to clipboard'
-    Top = 272
-    Width = 180
-    Anchors = [akLeft, akBottom]
-    AutoSize = False
-    Caption = 'Automatic copy'
-    Checked = True
-    ParentShowHint = False
-    ShowHint = True
-    State = cbChecked
-    TabOrder = 4
-    OnClick = cbAutoClick
+    OnClick = btCopyColorCairoClick
   end
   object lbLabel: TLabel
     Left = 8
     Height = 17
     Top = 8
-    Width = 180
+    Width = 224
     AutoSize = False
     Caption = 'Predefined colors'
     ParentColor = False
+  end
+  object edColorAGG: TLabeledEdit
+    Left = 8
+    Height = 31
+    Hint = 'Color in AGG format'
+    Top = 256
+    Width = 224
+    EditLabel.Height = 19
+    EditLabel.Width = 224
+    EditLabel.Caption = 'AGG'
+    TabOrder = 4
+  end
+  object btCopyColorAGG: TButton
+    Left = 124
+    Height = 28
+    Hint = 'Copy AGG color to clipboard'
+    Top = 290
+    Width = 108
+    Caption = 'Copy AGG'
+    TabOrder = 5
+    OnClick = btCopyColorAGGClick
   end
 end

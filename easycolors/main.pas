@@ -13,15 +13,17 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
-    btCopy: TButton;
-    cbAuto: TCheckBox;
-    edColor: TLabeledEdit;
-    edCairoColor: TLabeledEdit;
+    btCopyColorCairo: TButton;
+    btCopyColorAGG: TButton;
+    edColorHexa: TLabeledEdit;
+    edColorCairo: TLabeledEdit;
+    edColorAGG: TLabeledEdit;
     lbLabel: TLabel;
     lbColors: TListBox;
-    procedure btCopyClick(Sender: TObject);
-    procedure cbAutoClick(Sender: TObject);
-    procedure edColorKeyPress(Sender: TObject; var Key: char);
+    procedure btCopyColorAGGClick(Sender: TObject);
+    procedure btCopyColorCairoClick(Sender: TObject);
+    procedure edColorHexaKeyPress(Sender: TObject; var Key: char);
+    procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure lbColorsClick(Sender: TObject);
   private
@@ -62,17 +64,24 @@ procedure TForm1.FormCreate(Sender: TObject);
 var
   LName: TColorName;
 begin
+{ Load color names }
   for LName := Low(TColorName) to High(TColorName) do
     lbColors.Items.Append(DATA[LName].name);
+
   FormatSettings.DecimalSeparator := '.';
 end;
 
 procedure TForm1.lbColorsClick(Sender: TObject);
+var
+  LHexStr: string;
 begin
-  edColor.Text := '$' + IntToHex(DATA[TColorName(lbColors.ItemIndex)].value, 6);
+{ Hexadecimal notation }
+  LHexStr := IntToHex(DATA[TColorName(lbColors.ItemIndex)].value, 6);
+  edColorHexa.Text := '$' + LHexStr;
+{ Cairo format }
   ComputeCairoColor;
-  edColor.Hint := lbColors.Items[lbColors.ItemIndex];
-  edCairoColor.Hint := edColor.Hint;
+{ AGG format }
+  edColorAGG.Text := Format('$%s, $%s, $%s', [Copy(LHexStr, 1, 2), Copy(LHexStr, 3, 2), Copy(LHexStr, 5, 2)]);
 end;
 
 procedure TForm1.ComputeCairoColor;
@@ -82,32 +91,50 @@ var
   LColor: longword;
   LCairoColor: TCairoColor;
 begin
-  LColor := StrToInt(edColor.Text);
+  LColor := StrToInt(edColorHexa.Text);
   LCairoColor := GetCairoColor(LColor);
 
   with LCairoColor do
-    edCairoColor.Text := Format('%.*f, %.*f, %.*f', [D, r, D, g, D, b]);
-
-  if cbAuto.Checked then
-    BTCopyClick(nil);
+    edColorCairo.Text := Format('%.*f, %.*f, %.*f', [D, r, D, g, D, b]);
 end;
 
-procedure TForm1.btCopyClick(Sender: TObject);
+procedure TForm1.btCopyColorCairoClick(Sender: TObject);
 begin
-  Clipboard.AsText := edCairoColor.Text;
+  Clipboard.AsText := edColorCairo.Text;
 end;
 
-procedure TForm1.cbAutoClick(Sender: TObject);
+procedure TForm1.btCopyColorAGGClick(Sender: TObject);
 begin
-  btCopy.Enabled := not cbAuto.Checked;
+  Clipboard.AsText := edColorAGG.Text;
 end;
 
-procedure TForm1.edColorKeyPress(Sender: TObject; var Key: char);
+procedure TForm1.edColorHexaKeyPress(Sender: TObject; var Key: char);
+var
+  LHexStr: string;
 begin
   case Key of
-    #13: ComputeCairoColor;
+    #13:
+    begin
+      { Cairo format }
+        ComputeCairoColor;
+      { AGG format }
+        LHexStr := Copy(edColorHexa.Text, 2, 6);
+        edColorAGG.Text := Format('$%s, $%s, $%s', [Copy(LHexStr, 1, 2), Copy(LHexStr, 3, 2), Copy(LHexStr, 5, 2)]);
+    end;
     char(VK_Escape): Close;
   end;
+end;
+
+procedure TForm1.FormActivate(Sender: TObject);
+begin
+  lbColors.Anchors := [akTop, akLeft, akRight, akBottom];
+  edColorHexa.Anchors := [akLeft, akRight, akBottom];
+  edColorCairo.Anchors := [akLeft, akRight, akBottom];
+  edColorAGG.Anchors := [akLeft, akRight, akBottom];
+  btCopyColorCairo.Anchors := [akRight, akBottom];
+  btCopyColorAGG.Anchors := [akRight, akBottom];
+  Constraints.MinWidth := Width;
+  Constraints.MinHeight := Height;
 end;
 
 end.

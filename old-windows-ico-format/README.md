@@ -1,4 +1,6 @@
+# Old Windows ICO format
 
+Programs to read, write, display icons in the old Windows ICO format.
 
 http://tothpaul.free.fr/sources.php?tools.bmp2ico
 https://github.com/gladir/corail.git
